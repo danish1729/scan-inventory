@@ -9,7 +9,6 @@ import {
   ArrowRightLeft,
   User,
 } from "lucide-react";
-import { format } from "date-fns"; // Make sure you have date-fns or use native JS date
 
 interface LogEntry {
   id: string;
@@ -20,7 +19,7 @@ interface LogEntry {
   location_from: string | null;
   location_to: string | null;
   products: { name: string; sku: string } | null;
-  profiles: { full_name: string } | null;
+  user_name: string | null;
 }
 
 export function LogsView({ logs }: { logs: LogEntry[] }) {
@@ -112,7 +111,7 @@ export function LogsView({ logs }: { logs: LogEntry[] }) {
                 {/* User Info Footer */}
                 <div className="mt-2 pt-2 border-t border-slate-50 flex items-center gap-1 text-xs text-slate-400">
                   <User size={12} />
-                  <span>{log.profiles?.full_name || "Unknown User"}</span>
+                  <span>{log.user_name || "Unknown"}</span>
                 </div>
               </div>
             </div>

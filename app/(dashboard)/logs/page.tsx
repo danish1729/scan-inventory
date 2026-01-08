@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { LogsView } from "@/components/logs/LogsView";
 
-export const dynamic = "force-dynamic"; // Always fetch fresh logs
+export const dynamic = "force-dynamic";
 
 export default async function LogsPage() {
   const supabase = await createClient();
@@ -21,22 +21,21 @@ export default async function LogsPage() {
     .single();
 
   if (profile?.role !== "owner") {
-    redirect("/dashboard"); // Kick staff out
+    redirect("/scan"); // Kick staff out to scanner
   }
 
-  // 3. Fetch Logs (with Relations)
-  // We join 'products' to get the SKU/Name and 'profiles' to get the Staff Name
+  // 3. Fetch Logs (Updated for Snapshot Name Strategy)
+  // We removed 'profiles ( full_name )' and now rely on the 'user_name' column in the log itself.
   const { data: logs, error } = await supabase
     .from("inventory_logs")
     .select(
       `
       *,
-      products ( name, sku ),
-      profiles ( full_name )
+      products ( name, sku )
     `
     )
     .order("created_at", { ascending: false })
-    .limit(100); // Limit to last 100 actions for performance
+    .limit(100);
 
   if (error) {
     console.error("Logs Error:", error);

@@ -8,8 +8,6 @@ export interface Profile {
 }
 
 export interface ProductLocation {
-  id: string;
-  product_id: string;
   name: string;
   type: "main" | "safety";
   quantity: number;
@@ -20,11 +18,16 @@ export interface Product {
   store_id: string;
   name: string;
   sku: string;
+
+  // Owner Only Fields
   unit_cost?: number;
   is_expensive?: boolean;
   qr_url: string | null;
+  min_quantity: number; // For Low Stock Alerts
 
-  // Locations are now fetched via join, or calculated total
+  // Data from Relations (Joined)
   locations?: ProductLocation[];
-  total_stock?: number; // Helper for display
+
+  // Calculated Fields (Not in DB, added by Server Page)
+  total_stock?: number;
 }
